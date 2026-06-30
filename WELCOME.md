@@ -6,4 +6,4 @@ This repository contains all official templates and documentation for the Weaver
 - Read the [README](README.md)
 - Review the [Code of Conduct](CODE_OF_CONDUCT.md)
 - Use the receipt and witness templates
-- Join the Discord for daily activity
+- Join the Discord for daily activity: https://discord.gg/2cQ22HPnK
