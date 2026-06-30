@@ -30,7 +30,7 @@ Learn → Build → Test → Commit → Receipt → Review → Improve
 - **Weaver Systems** (receipt ledgers, claim registries, replay tools, governance systems)
 
 ## How to Participate
-1. Join our Discord server (link in announcements)
+1. Join our Discord server: https://discord.gg/2cQ22HPnK
 2. Read this repo and the templates
 3. Introduce yourself in `#introductions`
 4. Start posting daily commits and receipts
