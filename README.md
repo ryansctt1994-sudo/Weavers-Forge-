@@ -1,5 +1,7 @@
 # Weaver Forge — Daily Commit Lab
 
+[![Repo Readiness](https://github.com/ryansctt1994-sudo/Weavers-Forge-/actions/workflows/repo-readiness.yml/badge.svg)](https://github.com/ryansctt1994-sudo/Weavers-Forge-/actions/workflows/repo-readiness.yml)
+
 **A proof-of-work builder community for ML, Deep Learning, DSA, MLOps, AI systems, replay/evidence systems, and AI governance.**
 
 ### Motto
@@ -43,6 +45,22 @@ It contains:
 - Contribution guidelines
 - Project documentation
 - The roadmap for the Daily Commit Ledger (flagship project)
+- A lightweight repository readiness check
+
+## Run Readiness Check
+Run this from the repository root:
+
+```bash
+python scripts/check_repo.py
+```
+
+Expected result:
+
+```text
+PASS: Weaver Forge repository readiness checks passed.
+```
+
+See [RUNBOOK.md](RUNBOOK.md) for the full launch checklist.
 
 ---
 
