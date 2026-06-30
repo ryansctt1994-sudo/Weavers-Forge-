@@ -1,0 +1,23 @@
+name: Repo Readiness
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  docs-readiness:
+    name: Docs and launch readiness
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run repository readiness checks
+        run: python scripts/check_repo.py
