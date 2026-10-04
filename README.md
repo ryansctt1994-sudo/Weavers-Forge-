@@ -37,6 +37,12 @@ Learn → Build → Test → Commit → Receipt → Review → Improve
 3. Introduce yourself in `#introductions`
 4. Start posting daily commits and receipts
 
+## Portfolio boundary
+
+Weaver Forge is a community/process and evidence-workflow layer. A Forge receipt records work performed; it does not by itself establish correctness, independent reproduction, or operational authority. Technical claims must still be verified in the repository that owns the artifact.
+
+The canonical portfolio verification anchor is `ryansctt1994-sudo/Weaver_Os`.
+
 ## Repository Purpose
 This GitHub repository is the **official evidence layer** and documentation home for Weaver Forge.
 
