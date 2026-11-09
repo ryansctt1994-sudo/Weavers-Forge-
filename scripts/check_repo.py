@@ -61,21 +61,40 @@ def read(path: Path) -> str:
         fail(f"{path.relative_to(ROOT)} is not valid UTF-8: {exc}")
 
 
+
+def _inside_checkout(path: Path) -> bool:
+    """A readiness check must never accept files outside its checkout."""
+    try:
+        return path.resolve(strict=False).is_relative_to(ROOT.resolve())
+    except (OSError, RuntimeError, ValueError):
+        return False
+
+
+def _require_local_file(path: Path, description: str) -> None:
+    if not _inside_checkout(path):
+        fail(f"{description} escapes the repository")
+    if path.is_symlink():
+        fail(f"{description} is a symlink, not a checked-in file")
+    if not path.is_file():
+        fail(f"{description} is not a regular file")
+
+
+
 def check_required_files() -> None:
     for relative in REQUIRED_FILES:
         path = ROOT / relative
-        if not path.exists():
+        if not path.exists() and not path.is_symlink():
             fail(f"missing required file: {relative}")
-        if not path.is_file():
-            fail(f"required path is not a file: {relative}")
+        _require_local_file(path, f"required path {relative}")
         if path.stat().st_size == 0:
             fail(f"required file is empty: {relative}")
 
 
 def check_markdown_files() -> None:
     for path in sorted(ROOT.rglob("*.md")):
-        text = read(path)
         relative = path.relative_to(ROOT).as_posix()
+        _require_local_file(path, f"Markdown file {relative}")
+        text = read(path)
         if not text.endswith("\n"):
             fail(f"{relative} must end with a newline")
         if "link in announcements" in text.lower():
@@ -93,16 +112,22 @@ def check_readme_contract() -> None:
 
 def check_internal_links() -> None:
     for path in sorted(ROOT.rglob("*.md")):
-        text = read(path)
         relative = path.relative_to(ROOT).as_posix()
+        _require_local_file(path, f"Markdown file {relative}")
+        text = read(path)
         for match in LINK_RE.finditer(text):
             target = match.group(1).strip()
             if target.startswith(("http://", "https://", "mailto:", "#")):
                 continue
+            local_target = target.split("#", 1)[0]
             if target.startswith("/"):
-                target_path = ROOT / target.lstrip("/")
+                target_path = ROOT / local_target.lstrip("/")
             else:
-                target_path = path.parent / target.split("#", 1)[0]
+                target_path = path.parent / local_target
+            if not _inside_checkout(target_path):
+                fail(f"{relative} has escaping internal link: {target}")
+            if target_path.is_symlink():
+                fail(f"{relative} has symlinked internal link: {target}")
             if not target_path.exists():
                 fail(f"{relative} has broken internal link: {target}")
 
@@ -110,6 +135,7 @@ def check_internal_links() -> None:
 def check_template_placeholders_are_scoped() -> None:
     for path in sorted(ROOT.rglob("*.md")):
         relative = path.relative_to(ROOT).as_posix()
+        _require_local_file(path, f"template Markdown {relative}")
         text = read(path)
         if relative in ALLOWED_TEMPLATE_PLACEHOLDERS:
             allowed = ALLOWED_TEMPLATE_PLACEHOLDERS[relative]
